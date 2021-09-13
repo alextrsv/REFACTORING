@@ -7,7 +7,7 @@ public class BsectionMethod extends SolvingMethod {
         if(checkSuffCondition(leftBorder, rightBorder)) {
             while (Math.abs(rightBorder - leftBorder) > accuracy) {
                 currentX = (leftBorder + rightBorder) / 2;
-                if (function.solve(leftBorder, 0) * function.solve(currentX, 0) > 0)
+                if (function.getFunc().solve(leftBorder, 0) * function.getFunc().solve(currentX, 0) > 0)
                     leftBorder = currentX;
                 else rightBorder = currentX;
                 steps++;

@@ -2,6 +2,8 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.sun.xml.internal.bind.v2.runtime.reflect.Accessor;
@@ -23,91 +25,76 @@ import javafx.stage.Stage;
 
 public class SystemController {
 
-    @FXML private Label labelUserName;
     @FXML private ComboBox<String> comboChangeTask;
     @FXML private ComboBox<String> firstEqBox;
     @FXML private ComboBox<String> secondEqBox;
-    @FXML private Label xLabel;
     @FXML private TextField xInput;
-    @FXML private Label yLabel;
     @FXML private TextField yInput;
-    @FXML private Label accuracyLabel;
     @FXML private TextField accuracyInput;
-    @FXML private Button solveBtn;
     @FXML private Label xSolveOut;
-    @FXML private Label ySolveOut;
     @FXML private LineChart<Double, Double> chart;
 
-    Functions firstFunc, secondFunc;
-    String firstFuncStr, secondFuncStr;
-
+    Function firstFunc, secondFunc;
+    List<Function> functionList;
 
     @FXML
     void chooseFirstEq(ActionEvent event) {
-        firstFuncStr = firstEqBox.getValue();
-        chooseFunc(firstFuncStr, 1);
+        secondFunc = chooseFunc(firstEqBox);
     }
 
     @FXML
     void chooseSecondEq(ActionEvent event) {
-        secondFuncStr = secondEqBox.getValue();
-        chooseFunc(secondFuncStr, 2);
+        secondFunc = chooseFunc(secondEqBox);
     }
 
-    private void chooseFunc(String funcStr, int mode) {
-        Functions func = null;
-        switch (funcStr){
-            case "y - x^3 - 4 = 0":
-                func = (x, y)-> (y - x*x*x - 4.0);
-                break;
-            case  "y + e^x + 1 = 0":
-                Main.setModeIndx(1);
-                func = (x, y)-> ( y + Math.exp(x) + 1);
-                break;
-            case "x^2 + y = 0":
-                Main.setModeIndx(3);
-                func = (x, y)-> (x * x + y);
-                break;
-            case "y - x^3 - 4":
-                func = (x, y) -> (x * x * x  + 4.0);
-                break;
-            case "y + e^x + 1":
-                func = (x, y) -> (-Math.exp(x) - 1);
-                break;
-            case "x^2 + y":
-                func = (x, y) ->  -(x * x);
-                break;
+    private Function chooseFunc(ComboBox<String> box) {
+        for (Function func: functionList) {
+            if (func.getFunctionText().equals(box.getValue())) {
+                return func;
+            }
         }
-        if (mode == 1) firstFunc = func;
-        else secondFunc = func;
+        return Function.None;
+    }
+
+    Function changeFunc(Function function){
+        switch(function.getFunctionText()){
+            case "y - x^3 - 4":
+                function.setFunc((x, y) -> (x * x * x  + 4.0));
+                return function;
+            case "y + e^x + 1":
+                function.setFunc((x, y) -> (-Math.exp(x) - 1));
+                return function;
+            case "x^2 + y":
+                function.setFunc((x, y) ->  -(x * x));
+                return function;
+        }
+        return Function.None;
     }
 
     @FXML
     void solveBtnPressed(ActionEvent event) {
         NewtonMethod newtonMethod = new NewtonMethod(firstFunc, secondFunc, Double.parseDouble(xInput.getText()),
                 Double.parseDouble(yInput.getText()), Double.parseDouble(accuracyInput.getText()));
-        newtonMethod.setfirstFuncStr(firstEqBox.getValue());
-        newtonMethod.setSecondFuncStr(secondEqBox.getValue());
         xSolveOut.setText(newtonMethod.solve());
 
         double step = 0.02;
         XYChart.Series<Double, Double> series1 = new XYChart.Series<>();
         XYChart.Series<Double, Double> series2 = new XYChart.Series<>();
-        firstFuncStr = firstFuncStr.replace(" = 0", "");
-        secondFuncStr = secondFuncStr.replace(" = 0", "");
-        System.out.println("firstFuncStr: " + firstFuncStr);
-        System.out.println("secondFuncStr: " + secondFuncStr);
+        firstFunc.setFunctionText(firstFunc.getFunctionText().replace(" = 0", ""));
+        secondFunc.setFunctionText(secondFunc.getFunctionText().replace(" = 0", ""));
+        System.out.println("firstFuncStr: " + firstFunc.getFunctionText());
+        System.out.println("secondFuncStr: " + secondFunc.getFunctionText());
 
-        chooseFunc(firstFuncStr, 1);
-        chooseFunc(secondFuncStr, 2);
+        firstFunc = changeFunc(firstFunc);
+        secondFunc = changeFunc(secondFunc);
+
 
         for (double x = -20; x <20; x = x + step) {
-            series1.getData().add(new XYChart.Data<>(x, firstFunc.solve(x,0)));
-            series2.getData().add(new XYChart.Data<>(x, secondFunc.solve(x,0)));
+            series1.getData().add(new XYChart.Data<>(x, firstFunc.getFunc().solve(x,0)));
+            series2.getData().add(new XYChart.Data<>(x, secondFunc.getFunc().solve(x,0)));
         }
 //        // сформированный массив точек, передаем графику для отображения
         chart.getData().addAll(series1, series2);
-
 
     }
 
@@ -121,6 +108,8 @@ public class SystemController {
 
     @FXML
     void initialize() {
+        initParams();
+
         chart.setCreateSymbols(false);
         ObservableList<String> mode = FXCollections.observableArrayList("Решение уравнения", "Решение системы уравнений");
 
@@ -139,4 +128,14 @@ public class SystemController {
         secondEqBox.setItems(EqList);
         secondEqBox.setValue(EqList.get(Main.getModeIndx())); // устанавливаем выбранный элемент по умолчанию
     }
+
+    private void initParams() {
+        functionList = new ArrayList<>();
+        functionList.add(Function.SYS_FIRST);
+        functionList.add(Function.SYS_SECOND);
+        functionList.add(Function.SYS_THIRD);
+
+        firstFunc = secondFunc = Function.SYS_FIRST;
+    }
+
 }

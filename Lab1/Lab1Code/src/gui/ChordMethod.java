@@ -11,12 +11,12 @@ public class ChordMethod extends SolvingMethod{
 
             currentX = leftBorder;
 
-            while (Math.abs(currentX - previousX) > accuracy || Math.abs(function.solve(currentX,0)) > accuracy){
+            while (Math.abs(currentX - previousX) > accuracy || Math.abs(function.getFunc().solve(currentX,0)) > accuracy){
                 previousX = currentX;
 
-                currentX = (leftBorder * function.solve(rightBorder,0) - rightBorder * function.solve(leftBorder,0))/
-                        (function.solve(rightBorder,0) - function.solve(leftBorder,0));
-                if (function.solve(leftBorder,0) * function.solve(currentX,0) > 0)
+                currentX = (leftBorder * function.getFunc().solve(rightBorder,0) - rightBorder * function.getFunc().solve(leftBorder,0))/
+                        (function.getFunc().solve(rightBorder,0) - function.getFunc().solve(leftBorder,0));
+                if (function.getFunc().solve(leftBorder,0) * function.getFunc().solve(currentX,0) > 0)
                     leftBorder = currentX;
                 else rightBorder = currentX;
                 steps++;

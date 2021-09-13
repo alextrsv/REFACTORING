@@ -5,12 +5,11 @@ public class NewtonMethod  extends SolvingMethod{
 
     double currentX, currentY, previousX, previousY;
     int iterCount = 0;
-    Functions firstFunc, secondFunc;
-    String firstFuncStr, secondFuncStr;
+    Function firstFunc, secondFunc;
     double hlpX, hlpY;
     double[][] jacobiMatrix = new double[2][2];
 
-    public NewtonMethod(Functions firstFunc, Functions secondFunc, double x, double y, double accuracy){
+    public NewtonMethod(Function firstFunc, Function secondFunc, double x, double y, double accuracy){
         this.firstFunc = firstFunc;
         this.secondFunc = secondFunc;
         this.currentX = x;
@@ -20,7 +19,7 @@ public class NewtonMethod  extends SolvingMethod{
 
     @Override
     public String solve() {
-        while (firstFunc.solve(currentX, currentY) > accuracy || secondFunc.solve(currentX, currentY) > accuracy){
+        while (firstFunc.getFunc().solve(currentX, currentY) > accuracy || secondFunc.getFunc().solve(currentX, currentY) > accuracy){
             iterCount++;
             previousX = currentX;
             previousY = currentY;
@@ -40,13 +39,13 @@ public class NewtonMethod  extends SolvingMethod{
     //ДУБЛИРУЮЩИЙСЯ КОД
     private void initMatrix(double x, double y){
 
-        initJacobi(firstFuncStr, 1, x);
-        initJacobi(secondFuncStr,2, x);
+        initJacobi(firstFunc.getFunctionText(), 1, x);
+        initJacobi(secondFunc.getFunctionText(),2, x);
 
         double det = jacobiMatrix[0][0] * jacobiMatrix[1][1] - jacobiMatrix[0][1] * jacobiMatrix[1][0];
 
-        hlpX = (firstFunc.solve(x,y)* jacobiMatrix[1][1] - secondFunc.solve(x,y) * jacobiMatrix[0][1])/ det;
-        hlpY = (jacobiMatrix[0][0] * secondFunc.solve(x,y) - jacobiMatrix[1][0] * firstFunc.solve(x,y))/ det;
+        hlpX = (firstFunc.getFunc().solve(x,y)* jacobiMatrix[1][1] - secondFunc.getFunc().solve(x,y) * jacobiMatrix[0][1])/ det;
+        hlpY = (jacobiMatrix[0][0] * secondFunc.getFunc().solve(x,y) - jacobiMatrix[1][0] * firstFunc.getFunc().solve(x,y))/ det;
 
     }
 
@@ -69,25 +68,15 @@ public class NewtonMethod  extends SolvingMethod{
     }
 
 
-    public Functions getFirstFunc() {
+    public Function getFirstFunc() {
         return firstFunc;
     }
 
-    public void setFirstFunc(Functions firstFunc) {
+    public void setFirstFunc(Function firstFunc) {
         this.firstFunc = firstFunc;
     }
 
-    public Functions getSecondFunc() {
+    public Function getSecondFunc() {
         return secondFunc;
     }
-
-
-    public void setfirstFuncStr(String firstFuncStr) {
-        this.firstFuncStr = firstFuncStr;
-    }
-
-    public void setSecondFuncStr(String secondFuncStr) {
-        this.secondFuncStr = secondFuncStr;
-    }
-
 }

@@ -12,6 +12,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class AppController {
 
@@ -25,7 +28,10 @@ public class AppController {
     @FXML private Label solveOut;
     @FXML private LineChart<Double, Double> chart;
 
-    Functions currentFunction = (n,a)-> (n*n + 25*n);
+
+    List<Function> functionList;
+    Function currentFunction;
+
     SolvingMethod currentMethod = new BsectionMethod();
     int currentFunctionIndx = 0;
     int currentMethodIndx = 0;
@@ -36,7 +42,7 @@ public class AppController {
         double leftBorder = Double.parseDouble(leftBorderInput.getText());
         double rightBorder = Double.parseDouble(rightBorderInput.getText());
 
-        currentMethod.initParams(leftBorder, rightBorder, Double.parseDouble(accuracyInput.getText()), currentFunction, methodOfSolvingBox.getValue());
+        currentMethod.initParams(leftBorder, rightBorder, Double.parseDouble(accuracyInput.getText()), currentFunction);
 
         solveOut.setText(currentMethod.solve());
         createChart(0.02, leftBorder, rightBorder);
@@ -45,7 +51,7 @@ public class AppController {
     void createChart(double step, double lBorder, double rBorder){
         XYChart.Series<Double, Double> series = new XYChart.Series<>();
         for (double x = lBorder; x <rBorder; x = x + step) {
-            series.getData().add(new XYChart.Data<>(x, currentFunction.solve(x,0)));
+            series.getData().add(new XYChart.Data<>(x, currentFunction.getFunc().solve(x,0)));
         }
         // сформированный массив точек, передаем графику для отображения
         chart.getData().setAll(series);
@@ -78,30 +84,32 @@ public class AppController {
 
     @FXML
     void chooseEq(ActionEvent event) {
-        switch (equationsBox.getValue()){
-            case "x^2 + 25x = 0":
-                currentFunctionIndx = 0;
-                currentFunction = (n, a)-> (n*n + 25*n);
-                break;
-            case "x^3+23x-56 = 0":
-                currentFunctionIndx = 1;
-                currentFunction = (n,a)-> (n*n*n + 23*n - 56);
-                break;
-            case "sin(x)":
-                currentFunctionIndx = 2;
-                currentFunction = (n,a)-> (Math.sin(n));
-                break;
-            case "x^3 - x + 4":
-                currentFunctionIndx = 3;
-                currentFunction = (n,a)-> (n*n*n - n + 4);
-                break;
+        for (Function func: functionList) {
+            if (func.getFunctionText().equals(equationsBox.getValue())) {
+                currentFunctionIndx = func.getIndex();
+                 currentFunction = func;
+            }
         }
-
     }
 
 
     @FXML
     void initialize() {
+        initParams();
+        initGui();
+    }
+
+    private void initParams() {
+        functionList = new ArrayList<>();
+        functionList.add(Function.SINGLE_FIRST);
+        functionList.add(Function.SINGLE_SECOND);
+        functionList.add(Function.SINGLE_THIRD);
+        functionList.add(Function.SINGLE_FOURTH);
+
+        currentFunction = Function.SINGLE_FIRST;
+    }
+
+    private void initGui() {
         chart.setCreateSymbols(false);
         //
         ObservableList<String> modeList = FXCollections.observableArrayList("Решение уравнения", "Решение системы уравнений");
@@ -124,6 +132,5 @@ public class AppController {
 
         methodOfSolvingBox.setItems(methodsList);
         methodOfSolvingBox.setValue(methodsList.get(currentMethodIndx)); // устанавливаем выбранный элемент по умолчанию
-
     }
 }

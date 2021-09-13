@@ -5,17 +5,16 @@ public abstract class SolvingMethod {
      double accuracy;
      double leftBorder;
      double rightBorder;
-     Functions function = null;
+     Function function;
      double currentX;
      int steps = 0;
-     String functionStr;
 
     public  String solve() {
         return "solving...";
     }
 
     public boolean checkSuffCondition(double a, double b){
-        if(function.solve(a, 0)*function.solve(b,0) > 0) return false;
+        if(function.getFunc().solve(a, 0)*function.getFunc().solve(b,0) > 0) return false;
         else return true;
     }
 
@@ -43,13 +42,14 @@ public abstract class SolvingMethod {
         this.rightBorder = rightBorder;
     }
 
-    public Functions getFunction() {
+    public Function getFunction() {
         return function;
     }
 
-    public void setFunction(Functions function) {
+    public void setFunction(Function function) {
         this.function = function;
     }
+
 
     public double getCurrentX() {
         return currentX;
@@ -67,15 +67,11 @@ public abstract class SolvingMethod {
         this.steps = steps;
     }
 
-    public void setfunсtionStr(String funсtionStr) {
-        this.functionStr = funсtionStr;
-    }
 
-    public void initParams(double leftBorder, double rightBorder, double accuracy, Functions function, String funсtionStr){
+    public void initParams(double leftBorder, double rightBorder, double accuracy, Function function){
         this.leftBorder = leftBorder;
         this.rightBorder = rightBorder;
         this.accuracy = accuracy;
         this.function = function;
-        this.functionStr = funсtionStr;
     }
 }
