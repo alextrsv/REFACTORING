@@ -1,0 +1,34 @@
+1. AppController  -- длинный метод
+    void solveBtnPressed()
+        вместо множества set вызываю один initParams() (47)
+
+2. AppController  -- длинный метод
+    void solveBtnPressed()
+        работа с графиком выделена в отдельный метод "createChart"
+
+3. AppController  -- длинный метод
+    void changeTask()
+        вместо switch case - main.setIndxMode()
+
+4. NewtonMethod  - дублирующийся код
+    void initMatrix()
+        вместо двух одинаковых блоков switch отдельно для 1 и 2 функций, выделен один метод с одним блоком switch.
+
+5. Извлечение класса - сдедал отдельный StageLoader
+
+6. ChordMethod - удаление неиспользующегося кода (методы getDerivativeFunction)
+
+
+
++ 1. Дублирующийся код
++ 2. Длинный метод
++ 3. Удаление неиспользуемого кода
+4. Временное поле
+5. Группы данных
++ 6. Комментарии
+
+
+
+1. Извлечение метода
+2. Извлечение класса
+3.
