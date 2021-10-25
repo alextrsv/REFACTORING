@@ -1,0 +1,36 @@
+syntax = "proto3";
+package refactoring.lab2.grpc;
+
+//1
+message IsWordExistRequest{
+  string wordContent = 1;
+}
+message IsWordExistResponse{
+  bool isPresent = 1;
+  string wordContent = 2;
+}
+
+//2
+message GetSingleRootWordsRequest{
+  string wordContent = 1;
+}
+message GetSingleRootWordsResponse{
+  repeated string singleRootWords = 1;
+}
+
+//3
+message SaveNewWordRequest{
+  repeated string prefixes = 1;
+  string root = 2;
+  repeated string postfixes = 3;
+}
+message SaveNewWordResponse{
+  string message = 1;
+}
+
+service DictionaryService {
+  rpc isWordExist(IsWordExistRequest) returns (IsWordExistResponse);
+  rpc getSingleRootWords(GetSingleRootWordsRequest) returns (GetSingleRootWordsResponse);
+  rpc saveNewWord(SaveNewWordRequest) returns (SaveNewWordResponse);
+}
+
