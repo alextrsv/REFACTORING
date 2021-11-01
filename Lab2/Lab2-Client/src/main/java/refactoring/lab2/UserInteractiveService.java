@@ -3,9 +3,8 @@ package refactoring.lab2;
 
 import io.grpc.ManagedChannel;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class UserInteractiveService {
 
@@ -22,6 +21,7 @@ public class UserInteractiveService {
         String targetWord;
 
         do {
+            System.out.println("Введите слово: ");
             targetWord = in.nextLine();
             System.out.println(targetWord);
             if (dictionaryClientService.isWordPresent(targetWord)){
@@ -39,7 +39,7 @@ public class UserInteractiveService {
         List<String> postfixes = getPostfixes();
 
         if (word.equals(makeWholeWord(prefixes, root, postfixes))){
-            System.out.println(dictionaryClientService.saveNewWordToServer(prefixes, root, postfixes));     //////////////////////////////////////////////3 saveNewWOrd
+            System.out.println(dictionaryClientService.saveNewWordToServer(prefixes, root, postfixes));
         }else{
             printMessage("введенное целиуом слово не совпадает с веденным по частям");
         }
@@ -54,6 +54,8 @@ public class UserInteractiveService {
                 String.join("", prefixes),
                 root,
                 String.join("", postfixes)));
+
+//        return List.of(prefixes, List.of(root), postfixes).stream().flatMap(Collection::stream).collect(Collectors.joining(""));
     }
 
 

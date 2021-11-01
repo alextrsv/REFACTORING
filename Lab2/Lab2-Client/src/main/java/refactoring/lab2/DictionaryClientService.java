@@ -9,6 +9,8 @@ import java.util.List;
 public class DictionaryClientService {
 
     private static DictionaryServiceGrpc.DictionaryServiceBlockingStub dictionaryStub;
+    private static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_RESET = "\u001B[0m";
 
     public DictionaryClientService(){ }
     public DictionaryClientService(ManagedChannel channel){
@@ -19,7 +21,8 @@ public class DictionaryClientService {
     public String getSeemsWords(String targetWord) {
         DictionaryServiceOuterClass.GetSingleRootWordsResponse response =
                 dictionaryStub.getSingleRootWords(makeSingleRootWordsRequest(targetWord));
-        return String.join("\n", response.getSingleRootWordsList());
+        return ANSI_GREEN + "Однокоренные слова, найденные в нашей базе: \n" + ANSI_RESET
+                + String.join("\n", response.getSingleRootWordsList());
     }
 
 

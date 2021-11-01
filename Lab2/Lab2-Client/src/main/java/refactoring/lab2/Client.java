@@ -2,8 +2,6 @@ package refactoring.lab2;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import refactoring.lab2.grpc.DictionaryServiceGrpc;
-import refactoring.lab2.grpc.DictionaryServiceOuterClass;
 
 /**
  * Hello world!
@@ -12,7 +10,9 @@ import refactoring.lab2.grpc.DictionaryServiceOuterClass;
 public class Client {
     public static void main( String[] args ) {
 
-        ManagedChannel channel =  ManagedChannelBuilder.forTarget("localhost:8080")
+        String host = System.getenv("SERVER_HOST");
+        String port =  System.getenv("SERVER_PORT");
+        ManagedChannel channel =  ManagedChannelBuilder.forTarget(host + ":" + port)
                 .usePlaintext()
                 .build();
 
