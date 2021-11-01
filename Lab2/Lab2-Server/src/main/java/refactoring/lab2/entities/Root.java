@@ -9,13 +9,13 @@ import java.util.Collection;
 @Data
 @Entity
 @Table(name = "root")
-public class Root {
+public class Root  extends WordPart{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "content")
-    private String content;
+//    @Column(name = "content")
+//    private String content;
 
     @OneToMany(mappedBy = "root", fetch = FetchType.EAGER)
     private Collection<DictionaryWord> words;

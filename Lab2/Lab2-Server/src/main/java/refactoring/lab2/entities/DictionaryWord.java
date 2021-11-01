@@ -68,9 +68,15 @@ public class DictionaryWord {
 
 //    @Override
 //    public String toString() {
-//        return String.format("%s-%s-%s",
-//                String.join("-", prefixes),
-//                root,
-//                String.join("-", postfixes.toString()));
+//        ArrayList<String> prefixesContent = new ArrayList<>();
+//        ArrayList<String> postfixesContent = new ArrayList<>();
+//
+//        prefixes.forEach(p -> prefixesContent.add(p.getContent()));
+//        postfixes.forEach(p -> postfixesContent.add(p.getContent()));
+//
+//        return String.format("%s-%s%s",
+//                String.join("-", prefixesContent),
+//                root.getContent(),
+//                String.join("-", postfixesContent));
 //    }
 }

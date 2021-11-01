@@ -6,13 +6,13 @@ import java.util.Collection;
 //@Data
 @Entity
 @Table(name = "prefix")
-public class Prefix {
+public class Prefix extends WordPart {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "content")
-    private String content;
+//    @Column(name = "content")
+//    private String content;
 
     @ManyToMany(mappedBy = "prefixes")
     private Collection<DictionaryWord> words;

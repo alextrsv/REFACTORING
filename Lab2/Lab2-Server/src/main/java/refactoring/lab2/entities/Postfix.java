@@ -8,13 +8,13 @@ import java.util.Collection;
 @Data
 @Entity
 @Table(name = "postfix")
-public class Postfix {
+public class Postfix extends WordPart {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "content")
-    private String content;
+//    @Column(name = "content")
+//    private String content;
 
     @ManyToMany(mappedBy = "postfixes")
     private Collection<DictionaryWord> words;

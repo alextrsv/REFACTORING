@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class ServerMain {
     public static void main( String[] args ) throws IOException, InterruptedException {
-        Server server = ServerBuilder.forPort(8080)
+        Server server = ServerBuilder.forPort(Integer.parseInt(System.getenv("SERVER_PORT")))
                 .addService(new DictionaryServiceImpl())
                 .build();
 

@@ -72,8 +72,9 @@ public class CrudDAOImpl<T> implements CrudDAO<T> {
     public void save(T entry) {
         Session session = openSession();
         session.getTransaction().begin();
+
 //        session.merge(entry);
-        session.saveOrUpdate(entry);
+            session.saveOrUpdate(entry);
         session.flush();
         session.getTransaction().commit();
         session.close();
