@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="refactoring-lab-2-server:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>refactoring-lab-2-server</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="refactoring-lab-2.war">
+      <element id="artifact" artifact-name="refactoring-lab-2-server:war exploded" />
+    </root>
+  </artifact>
+</component>
